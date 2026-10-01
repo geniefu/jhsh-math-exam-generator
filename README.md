@@ -1,6 +1,29 @@
 # 國高中數學科 108 課綱素養命題與自動化產卷技能 (jhsh-math-exam-generator)
 
-本技能 (Skill) 專門用於指導 Google Antigravity 等 AI 代理人進行國高中數學科段考自動化命題，生成符合「新北市立錦和高級中學」試務組規範、**教育部《十二年國民基本教育課程綱要—數學領域（108 課綱）》**與 PISA 數學推論架構的正式試題卷、答案解析卷與審題檢核表。
+本技能 (Skill) 專門用於指導 Google Antigravity 等 AI 代理人進行國高中數學科段考自動化命題，生成完全符合「新北市立錦和高級中學」試務組規範、**教育部《十二年國民基本教育課程綱要—數學領域（108 課綱）》**與 PISA 數學推論架構的正式試題卷、答案解析卷與審題檢核表。
+
+---
+
+## 🏛️ 專案模組架構 (Architecture)
+
+本技能遵循 Antigravity 漸進揭示 (Progressive Disclosure) 設計規範，採用精簡三層架構：
+
+```text
+jhsh-math-exam-generator/
+├── SKILL.md                             # 核心引導文檔 (<200行)：提詞模板、排版規格、工作流程與自檢清單
+├── README.md                            # 專案介紹與安裝說明文檔
+├── requirements.txt                     # Python 相依套件 (python-docx, matplotlib, numpy, sympy)
+├── LICENSE                              # MIT 開源授權條款
+├── scripts/                             # 自動化輔助程式碼庫
+│   ├── docx_math_builder.py             # Word 試卷建構器：1cm 邊界、11Pt 標楷體、填充作答欄、非選作答框
+│   ├── math_omml_builder.py             # Word 原生 OMML 數學方程式：分式、根式、聯立方程、線段頂標
+│   ├── math_geometry_plotter.py         # 300 DPI 座標先行幾何繪圖：等比例鎖定、直角/角度弧/等長標記
+│   └── math_sympy_verifier.py           # SymPy 符號運算 100% 驗算：解方程、幾何三角形自洽性、選項唯一性
+└── references/                          # 課綱法規與評量參考庫
+    ├── curriculum_guidelines_7_9.md     # 國中 7~9 年級指標與法定備註欄防超綱紅線
+    ├── curriculum_guidelines_10_12.md   # 高中 10~12 年級必修/數A/數B/數甲/數乙分軌邊界
+    └── rubric_non_multiple_choice.md    # 國中會考與高中段考非選 0~3 級分評分規準手冊
+```
 
 ---
 
@@ -59,7 +82,7 @@ https://github.com/geniefu/jhsh-math-exam-generator
    - 第一部分：單一選擇題【例如：12 題，每題 4 分，共 48 分】
    - 第二部分：填充題【例如：10 格，每格 4 分，共 40 分，請於卷末附填充題標準答案欄】
    - 第三部分：非選擇題（計算與證明題）【例如：2 題，每題 6 分，共 12 分，附作答區方框】
-3、難易程度：【例如：難易適中（預估平均通過率約 60%～65%，兼顧基本概念熟練與多步驟素養推論）】。
+3、難易程度：【例如：難易適中（預估平均通過率約 60%～65%）】。
 4、圖形與公式要求：所有代數分式、根號、聯立方程與幾何線段符號請使用 Word 原生可編輯 OMML 方程式；幾何題與座標題請繪製 300 DPI 高清黑白向量圖並採右側浮動文繞圖排版。
 5、其它：【選填，例如：嚴格遵守 108 數學課綱防超綱限制，並以 Python SymPy 100% 自動驗算確認條件無矛盾且答案唯一】。
 ```
@@ -69,6 +92,9 @@ https://github.com/geniefu/jhsh-math-exam-generator
 ## 🛠️ 環境依賴需求 (Dependencies)
 
 ```bash
+pip install -r requirements.txt
+```
+或直接安裝：
+```bash
 pip install python-docx matplotlib numpy sympy
 ```
-
